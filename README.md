@@ -107,4 +107,32 @@ Se você quiser uma introdução maior ao Compose, você também pode conferir e
 
 ## Dia 02
 
+Para essa primeira amostra, você apresentou todas as informações apenas com o visual padrão de cada _composable_, ou seja, um resultado simples e pouco atrativo visualmente.
+
+Dessa forma, **o objetivo do desafio de hoje será a personalização de cada elemento**! Para implementar essa tela, você deve combinar elementos _composable_ de layout.
+
+Conforme a amostra, existem outros elementos _composable_ para auxiliar no layout, como por exemplo o `Box`, que permite o empilhamento de vários composables; ou então o `Row`, que tem a mesma característica do `Column`, mas é usado para o agrupamento horizontal.
+
+Além dos _composables_ de layout, agora você vai utilizar o `Modifier`. A partir dele é possível personalizar _composables_, como, por exemplo, aplicar cores, modificar a forma, aplicar bordas, etc.
+
+Cada _composable_ possui propriedades próprias. Os _composables_ de layout, por exemplo, possuem propriedades para ajustar seus filhos (um filho é um _composable_ dentro de outro, como, por exemplo, um `Text` dentro de um Column); já o _composable_ `Text` é capaz de modificar o seu conteúdo, como tamanho de fonte, alinhamento, etc.
+
+Em resumo, a sua tarefa é implementar um visual mais atraente para apresentar as informações públicas de um perfil do GitHub.
+
+### Dica
+
+Antes de começar a implementação, pense em como você pode dividir o layout para facilitar a decisão dos composables que vai utilizar.
+
+Observe que, nessa amostra, existe um _composable_ exclusivo para o fundo escuro do topo e outro exclusivo para as informações abaixo. Além disso, a imagem foi deslocada, ou seja, ficou entre o composable com fundo escuro do topo e o outro abaixo que mantém as informações gerais.
+
+Também, as informações de nome e usuário estão dentro de um _composable_ exclusivo que as mantém juntas e alinhadas no centro.
+
+É válido ressaltar que essa é apenas uma das possíveis implementações, ou seja, você pode chegar no mesmo resultado visual com estratégias diferentes!
+
+### Extra
+
+Além de chegar no resultado visual, também, você pode aplicar algumas técnicas, como por exemplo, uma altura e deslocamento mais dinâmico para a imagem e fundo escuro.
+
+## Dia 03
+
 Em breve.
