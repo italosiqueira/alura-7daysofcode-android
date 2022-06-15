@@ -135,4 +135,61 @@ Além de chegar no resultado visual, também, você pode aplicar algumas técnic
 
 ## Dia 03
 
+Pois bem, o seu App agora é capaz de apresentar as informações básicas de um usuário do GitHub estaticamente. O seu objetivo final será obter esses dados dinamicamente a partir da API do GitHub, mas vamos ir em passos pequenos por enquanto.
+
+Você já pode visualizar os dados públicos de qualquer usuário do Git Hub através do link:
+
+https://api.github.com/users/NOME_DO_USUARIO
+
+Onde você pode substituir "NOME_DO_USUARIO" por qualquer usuário do GitHub, inclusive o seu próprio!
+
+Observe que você pode acessar a minha (ou sua) foto do perfil a partir do campo "`avatar_url`". Dessa forma, em vez de usar uma imagem estática, **agora você pode fazer uma requisição para baixar essa imagem a partir dessa URL e apresentá-la na tela**!
+
+Para fazer essa implementação há diferentes maneiras. Dentre elas, você pode optar por uma requisição mais de baixo nível, que irá lidar com input e output streams, baixar os bytes que representem a imagem e convertê-los para um tipo suportado.
+
+Considerando que essa ação é bastante comum em Apps Android, existem bibliotecas que fazem isso para você, como, por exemplo, a **Coil** para o Compose. Esta biblioteca já possui uma integração com o Jetpack Compose, sendo assim, recomendo que considere o seu uso para o desafio de hoje.
+
+Em resumo, você deve fazer o seguinte:
+
+- Importar a biblioteca Coil ao projeto;
+- Substituir o _composable_ de imagem (estático) para o de imagem do Coil (dinâmico);
+- Tentar carregar a imagem do seu perfil do GitHub a partir da URL vinda do campo `avatar_url`.
+
+Esse desafio não é tão complexo, porém, vai exigir alguns conhecimentos no projeto Android, como adicionar dependências no Gradle, identificar possíveis problemas por falta de permissão de acesso à internet e, também, a leitura e acompanhamento do passo-a-passo da documentação da biblioteca.
+
+### Dica
+
+Ao ajustar o código, muito provavelmente, você chegará no _composable_ `AsyncImage()`:
+
+```kotlin
+AsyncImage(
+   model = "https://avatars.githubusercontent.com/u/8989346?v=4",
+   contentDescription = null
+)
+```
+
+Note que ele é bastante similar ao `Image()`. A grande diferença é que, agora, você enviará o endereço diretamente.
+
+Caso o seu App não tenha funcionado como esperado, muito provavelmente ele não está com permissão para acessar a internet. Você pode liberar esse acesso a partir do arquivo `AndroidManifest.xml`.
+
+Outro ponto importante é que a Coil não apresenta a imagem via URL no preview. Para isso, você deverá utilizar um placeholder com uma imagem do projeto. Algo como:
+
+```kotlin
+AsyncImage(
+   model = ImageRequest.Builder(LocalContext.current)
+      .data("ENDEREÇO_DA_IMAGEM")
+       .crossfade(true)
+       .build(),
+   placeholder = painterResource(R.drawable.placeholder)
+)
+```
+
+### Extra
+
+[Explore a documentação](https://coil-kt.github.io/coil/compose/) para testar e aplicar mais detalhes da Coil.
+
+Você pode verificar mais detalhes sobre [permissões de acesso à rede aqui](https://developer.android.com/training/basics/network-ops/connecting).
+
+## Dia 04
+
 Em breve.
