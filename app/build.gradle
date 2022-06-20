@@ -62,4 +62,8 @@ dependencies {
 
     // Coil-Compose - Image loading library Coil with Jetpack Compose Support
     implementation "io.coil-kt:coil-compose:2.1.0"
+    // Retrofit: turns your HTTP API into a Java interface.
+    implementation "com.squareup.retrofit2:retrofit:2.3.0"
+    // Retrofit - GSON Converter
+    implementation "com.squareup.retrofit2:converter-gson:2.3.0"
 }
