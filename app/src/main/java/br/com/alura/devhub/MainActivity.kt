@@ -1,6 +1,7 @@
 package br.com.alura.devhub
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
@@ -23,13 +24,24 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.lifecycleScope
 import br.com.alura.devhub.ui.theme.DevHubTheme
+import br.com.alura.devhub.webclient.RetrofitInit
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        lifecycleScope.launch {
+            RetrofitInit().gitHubService.findProfileBy("italosiqueira")
+                .let {
+                    Log.i("MainActivity", "onCreate: $it")
+                }
+        }
+
         setContent {
             DevHubTheme {
                 // A surface container using the 'background' color from the theme
@@ -37,35 +49,16 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Column {
-                        Image(
-                            painter = painterResource(id = R.drawable.profile_picture),
-                            contentDescription = "Profile Picture"
-                        )
-
-                        // Add a horizontal space between the image and the column
-                        Spacer(modifier = Modifier.height(8.dp))
-
-                        Text(text = "Desenvolvedor e Analista de Sistemas")
-                        Text(text = "Italo Siqueira Lima")
-                        Text(text = "italosiqueira")
-                    }
+                    ProfileScreen();
                 }
             }
         }
     }
 }
 
-data class OutputTextField(val label: String, val content: String)
-
-@Composable
-fun DisplayTextField(field: OutputTextField) {
-    Text(text = "${field.label}: ${field.content}")
-}
-
 @Preview(showBackground = true)
 @Composable
-fun DefaultPreview() {
+fun ProfileScreen() {
     DevHubTheme {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
