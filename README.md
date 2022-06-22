@@ -261,4 +261,77 @@ Caso você precise de um material mais detalhado sobre _Coroutines_, você pode 
 
 ## Dia 05
 
-Em breve.
+Agora que você tem acesso às informações e uma tela capaz de recebê-las, **o seu objetivo no desafio de hoje será integrar as informações recebidas com a tela**.
+
+Considerando que a requisição HTTP é assíncrona e o código de tela não deve esperar pela resposta da requisição, você deve ajustar o seu código para que ele seja compatível com esse tipo de cenário. Para isso, você pode considerar algumas estratégias como, por exemplo, _callback_, ou então estruturas de publicação e inscrição, como é o caso do `Flow` de _Coroutines_.
+
+Um grande destaque em relação ao `Flow` é que o **Jetpack Compose** oferece uma extensão compatível com o `State` (referência responsável por atualizar a tela do `Compose`).
+
+Em resumo, você deve fazer as seguintes tarefas para no desafio de hoje:
+
+- Ajustar o código para utilizar _callback_ ou Flow (dê preferência ao Flow);
+- Integrar as informações recebidas da API e apresentá-las na tela.
+
+Antes de realizar os ajustes, tente utilizar uma classe intermediária que será responsável por rodar a requisição com a Retrofit e, então, quando ela obtiver o resultado, o retornará para quem for consumi-la. Geralmente, essa classe pode ser considerada um _WebClient_, _ViewModel_, _Repository_, etc.
+
+```kotlin
+class GitHubWebClient(
+   private val service: GitHubService = RetrofitInit().gitHubService
+) {
+
+   fun findProfileBy(user: String) = flow{
+      ...
+   }
+}
+```
+
+Então, dentro do _composable_, você pode acessar essa classe e utilizar o método que vai dar acesso ao Flow. Por exemplo:
+
+```kotlin
+@Composable
+fun ProfileScreen(
+   user: String,
+   webClient: GitHubWebClient = GitHubWebClient()
+) {
+   ...
+}
+```
+
+Para fazer a coleta das informações do Flow, você pode utilizar a extensão `collectAsState()`. Essa função exige o argumento "`initial`", que representa o valor inicial após a primeira leitura. Você pode enviar `null` e aplicar uma lógica para apresentar o conteúdo visual do App apenas quando o valor for diferente de nulo:
+
+```kotlin
+val foundUser by webClient.findProfileBy(user)
+      .collectAsState(initial = null)
+   foundUser?.let { userProfile ->
+      ...
+   }
+```
+
+Lembre-se de modificar as informações de cada composable para que sejam apresentados os dados vindo da API. Nessa amostra de código acima, as informações estão vindo de `userProfile`.
+
+Após aplicar os ajustes, rode o App e confira se as informações apresentadas são as mesmas do perfil que foi carregado. Para ter certeza que ele está funcionando, você pode modificar o usuário do perfil a ser buscado e carregar novamente.
+
+### Dica
+
+Ao utilizar a referência de `State`, existe mais de uma maneira para ler esse tipo de informação:
+
+```kotlin
+val mutableState = remember { mutableStateOf(default) }
+
+var value by remember { mutableStateOf(default) }
+
+val (value, setValue) = remember { mutableStateOf(default) }
+```
+
+Para usar o `by` via _**delegate**_, você precisa fazer o seguinte import:
+
+```kotlin
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+```
+
+### Extra
+
+Você pode obter mais detalhes sobre **o uso do State** e gerenciamento de estado no Jetpack Compose [nessa página da documentação](https://developer.android.com/jetpack/compose/state).
+
+Você também pode ler mais sobre a [teoria e implementação do Flow nesta página da documentação](https://developer.android.com/kotlin/flow).
