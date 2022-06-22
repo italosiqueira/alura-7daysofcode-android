@@ -192,4 +192,73 @@ Você pode verificar mais detalhes sobre [permissões de acesso à rede aqui](ht
 
 ## Dia 04
 
+O seu próximo desafio será **implementar um código capaz de fazer uma requisição HTTP e buscar as seguintes informações**:
+
+- foto do perfil
+- nome
+- usuário
+- bio
+
+O desafio de hoje é, provavelmente, um dos mais trabalhosos, pois você vai precisar fazer o seguinte:
+
+- Utilizar um cliente HTTP;
+- Implementar o código que realiza a requisição com a API do GitHub a partir de um determinado usuário;
+- Converter os dados recebidos em JSON para um objeto Kotlin;
+- Apresentar as informações esperadas do usuário utilizado na requisição.
+
+Existe mais de uma maneira de fazer requisições desse tipo para o Android. Dentre as possibilidades, o `HttpsURLConnection` é uma solução possível que já vem disponível no SDK por conta do Java, porém, a implementação com ela é mais verbosa, ou seja, você precisa escrever mais código para obter o resultado esperado.
+
+Considerando outras possibilidades, a **Retrofit** é uma das bibliotecas mais atrativas como cliente HTTP, pois ela facilita alguns passos das requisições HTTP. Por exemplo, ela mantém uma configuração padrão para requisições que aceitam JSON, possui conversores automáticos de objeto para JSON (e vice-versa), tem suporte para _ _coroutines_ e é pouco verbosa na configuração e utilização. Dados esses pontos, recomendo o uso da **Retrofit** para este desafio!
+
+Pensando em tornar esta implementação mais bem organizada, separe o código de requisição em diferentes classes, arquivos e pacotes. Você pode, por exemplo, criar o pacote `webclient`, que vai conter todo o código da Retrofit, desde a configuração de inicialização, modelo para obter os dados e os serviços da Retrofit (interfaces com as requisições). Em código, você vai ter um resultado similar a este:
+
+- Classe para inicialização:
+
+```kotlin
+class RetrofitInit {
+    private val retrofit = ...
+
+    val gitHubService get() = ...
+}
+```
+
+- Classe que representa o modelo:
+
+```kotlin
+data class GitHubProfileWeb(
+   ...
+)
+```
+
+- Interface que representa o serviço:
+
+```kotlin
+interface GitHubService {
+   @GET("/users/{user}")
+   suspend fun findProfileBy(@Path("user") user: String): GitHubProfileWeb
+}
+```
+
+É importante destacar que a conversão de JSON para objeto não é automática, é necessário adicionar o conversor ao projeto e também à configuração de inicialização da **Retrofit**.
+
+Após finalizar a implementação da requisição, no método `onCreate()` da `MainActivity`, faça a requisição e apresente o retorno da mesma em um log. Confira se todas as informações são apresentadas como esperado.
+
+### Dica
+
+É válido ressaltar que a API do GitHub possui um limite de requisições. Na última verificação, eram 60 requisições por hora. Isso significa que, durante o desenvolvimento e teste do código, você pode obter um resultado inesperado após um determinado tempo e pode assumir que o código está com problema, mas pode ser apenas a restrição de limite de requisições da API.
+
+Ao criar um projeto com o Compose, já são adicionadas algumas bibliotecas por padrão. Dentre elas, temos a `androidx.lifecycle:lifecycle-runtime-ktx`, que dá acesso ao escopo de coroutines vinculado ao ciclo de vida da Activity. Você pode usar esse escopo para executar a função de suspensão.
+
+### Extra
+
+Caso seja a sua primeria vez utilizando a **Retrofit**, você pode dar uma olhada [neste artigo](https://medium.com/collabcode/consumindo-api-rest-no-android-com-retrofit-em-kotlin-parte-1-5e752ab8a877) que apresenta um tutorial.
+
+A Retrofit possui diversas implementações de conversores que utilizam libs famosas em conversão de JSON para objeto. Você pode conferir as opções na [seção de configuração da documentação do Retrofit](https://square.github.io/retrofit/).
+
+Para mais informações sobre implementação com _Coroutines_, você pode [consultar este artigo](https://www.alura.com.br/artigos/retrofit-com-coroutines-e-livedata-no-android).
+
+Caso você precise de um material mais detalhado sobre _Coroutines_, você pode conferir a [Websérie de operações assíncronas](https://cursos.alura.com.br/extra/webseries-coroutines-kotlin/operacoes-assincronas-no-kotlin-1-apresentacao-w1225). Ou então, pode [conferir esta página da documentação com diversas orientações, dicas e casos de uso](https://developer.android.com/kotlin/coroutines).
+
+## Dia 05
+
 Em breve.
